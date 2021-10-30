@@ -36,3 +36,56 @@
     transform: rotate(360deg);
   }
 }
+
+.profile-pic {
+  height: 300px;
+  width: 300px;
+  border-radius: 50%;
+  object-fit: contain;
+}
+
+.movie-poster {
+  height: 500px;
+  width: 340px;
+  object-fit: contain;
+}
+
+.movie-specs {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.movie-name{
+  font-size: 24px;
+  margin: 8px 0px;
+  font-weight: 600;
+}
+
+.movie-container{
+  width: 340px;
+}
+
+.movie-rating{
+  font-size: 18px;
+  font-weight: 400;
+}
+
+body{
+  margin: 24px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.movie-list{
+  display: flex;
+  /* grid-gap: 24px; */
+  gap: 24px;
+  justify-content: space-evenly;
+  flex-wrap: wrap
+}
+
+.counter-container {
+  display: flex;
+  grid-gap: 10px;
+  gap: 10px;
+}
