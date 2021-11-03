@@ -1,0 +1,2 @@
+Task on 31/10/2021:
+update movie list with form for user input name, rating, summary, poster

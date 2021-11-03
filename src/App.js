@@ -47,45 +47,19 @@ const movies = [
     rating: "8.7"
   }
 ];
-function App() {
-  return (
-    <div className="App">
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header> */}
-      <div className="movie-list">
-        {movies.map((item, index) => {
-          return <Movie key={item?.name+index} index {...item} />
-        })}
-      </div>
-      
 
-    </div>
-  );
-}
-
-const LikeButton = () => {
-  const [like, setLike] = useState(0)
-  const [dislike, setDislike] = useState(0)
-  return <div className="counter-container">
-    <button onClick={() => setLike(like + 1)}>👍 Like {like}</button>
-    <button onClick={() => setDislike(dislike + 1)}>👎 Dislike {dislike}</button>
+const MovieList = (props) => {
+  const { movies } = props
+  return <div className="movie-list">
+    {movies.map((item, index) => {
+      return <Movie key={item?.name + index} index {...item} />
+    })}
   </div>
 }
 
 const Movie = (props) => {
   const { name, image, rating, summary } = props
+  const [showDescription, setShowDescription] = useState(true)
   return <div className="movie-container">
     <img className="movie-poster" src={image} alt="img" />
     <div className="movie-specs">
@@ -97,12 +71,109 @@ const Movie = (props) => {
       </p>
     </div>
     <p className="movie-summary">
-      {summary}
+      {showDescription && summary}
     </p>
+    <button style={{ margin: 10 }} onClick={() => setShowDescription(!showDescription)}>{showDescription ? 'Hide' : 'Show'} Description</button>
     <div style={{ display: 'flex' }}>
-        <LikeButton />
-      </div>
+      <LikeButton />
+    </div>
   </div>
 }
+
+function App() {
+  const [colorList, setColorList] = useState([])
+  const [name, setName] = useState('')
+  const [rating, setRating] = useState('')
+  const [poster, setPoster] = useState('')
+  const [description, setDescription] = useState('')
+  const [movieList, setMovieList] = useState(movies)
+
+  const [backgroundColor, setBackgroundColor] = useState('')
+
+  const onSubmit = () => {
+    if (name && rating && poster && description) {
+      let params = {
+        name,
+        image: poster,
+        rating,
+        summary: description
+      }
+      movieList.push(params)
+      setMovieList([...movieList])
+      console.log('here', movieList)
+      setName('')
+      setPoster('')
+      setDescription('')
+      setRating('')
+    } else {
+      alert('Please fill all the fields')
+    }
+  }
+
+  return (
+    <div className="App">
+
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start' }} onSubmit={onSubmit}>
+        <label>
+          Name:
+          <input type="text" value={name} onChange={event => {
+            setName(event.target.value)
+          }} />
+        </label>
+        <br />
+
+        <label>
+          Poster:
+          <input type="text" value={poster} onChange={event => {
+            setPoster(event.target.value)
+          }} />
+        </label>
+        <br />
+
+        <label>
+          Description:
+          <input type="text" value={description} onChange={event => {
+            setDescription(event.target.value)
+          }} />
+        </label>
+        <br />
+
+        <label>
+          Rating:
+          <input type="text" value={rating} onChange={event => {
+            setRating(event.target.value)
+          }} />
+        </label>
+        <input style={{ marginTop: 10 }} type="submit" value="Submit" onClick={() => onSubmit()} />
+      </div>
+
+      <MovieList movies={movieList} />
+
+      {/* <input style={{ backgroundColor }} onChange={event => {
+        setBackgroundColor(event.target.value)
+      }} />
+      <button onClick={() => setColorList([...colorList, backgroundColor])}>Add Color</button>
+
+      {colorList.map(item => <ColorBox color={item} />)} */}
+
+    </div>
+  );
+}
+
+const ColorBox = (props) => {
+  const { color } = props
+  return <div style={{ height: 200, width: 400, backgroundColor: color, margin: 10 }} />
+}
+
+const LikeButton = () => {
+  const [like, setLike] = useState(0)
+  const [dislike, setDislike] = useState(0)
+  return <div className="counter-container">
+    <button onClick={() => setLike(like + 1)}>👍 Like {like}</button>
+    <button onClick={() => setDislike(dislike + 1)}>👎 Dislike {dislike}</button>
+  </div>
+}
+
+
 
 export default App;
