@@ -1,5 +1,7 @@
 import './App.css';
 import { useState } from 'react';
+import { Button, IconButton, TextField } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 // const movies = [
 //   {
@@ -73,7 +75,9 @@ const Movie = (props) => {
     <p className="movie-summary">
       {showDescription && summary}
     </p>
-    <button style={{ margin: 10 }} onClick={() => setShowDescription(!showDescription)}>{showDescription ? 'Hide' : 'Show'} Description</button>
+
+    {/* <button style={{ margin: 10 }} onClick={() => setShowDescription(!showDescription)}>{showDescription ? 'Hide' : 'Show'} Description</button> */}
+    <Button variant="contained" style={{ margin: 10 }} onClick={() => setShowDescription(!showDescription)}>{showDescription ? 'Hide' : 'Show'} Description</Button>
     <div style={{ display: 'flex' }}>
       <LikeButton />
     </div>
@@ -113,39 +117,56 @@ function App() {
   return (
     <div className="App">
 
-      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start' }} onSubmit={onSubmit}>
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
         <label>
-          Name:
-          <input type="text" value={name} onChange={event => {
+          {/* Name: */}
+          {/* <input type="text" value={name} onChange={event => {
+            setName(event.target.value)
+          }} /> */}
+          <TextField id="standard-basic" label="Name" variant="standard" type="text" value={name}  onChange={event => {
             setName(event.target.value)
           }} />
         </label>
         <br />
 
         <label>
-          Poster:
-          <input type="text" value={poster} onChange={event => {
+          {/* Poster: */}
+          {/* <input type="text" value={poster} onChange={event => {
+            setPoster(event.target.value)
+          }} /> */}
+          <TextField id="standard-basic" label="Poster" variant="standard" value={poster} onChange={event => {
             setPoster(event.target.value)
           }} />
         </label>
         <br />
 
         <label>
-          Description:
-          <input type="text" value={description} onChange={event => {
+          {/* Description: */}
+          {/* <input type="text" value={description} onChange={event => {
+            setDescription(event.target.value)
+          }} /> */}
+          <TextField id="standard-basic" label="Description" variant="standard" type="text" value={description} onChange={event => {
             setDescription(event.target.value)
           }} />
         </label>
         <br />
 
         <label>
-          Rating:
+          {/* Rating:
           <input type="text" value={rating} onChange={event => {
+            setRating(event.target.value)
+          }} /> */}
+          <TextField id="standard-basic" label="Rating" variant="standard" type="text" value={rating} onChange={event => {
             setRating(event.target.value)
           }} />
         </label>
-        <input style={{ marginTop: 10 }} type="submit" value="Submit" onClick={() => onSubmit()} />
+        {/* <input style={{ marginTop: 10 }} type="submit" value="Submit" onClick={() => onSubmit()} /> */}
+        <Button variant="contained" style={{ marginTop: 10 }} onClick={() => onSubmit()}>Add Movie</Button>
+        {/* <IconButton aria-label="delete">
+          <DeleteIcon />
+        </IconButton> */}
       </div>
+
 
       <MovieList movies={movieList} />
 
@@ -169,8 +190,10 @@ const LikeButton = () => {
   const [like, setLike] = useState(0)
   const [dislike, setDislike] = useState(0)
   return <div className="counter-container">
-    <button onClick={() => setLike(like + 1)}>👍 Like {like}</button>
-    <button onClick={() => setDislike(dislike + 1)}>👎 Dislike {dislike}</button>
+    {/* <button onClick={() => setLike(like + 1)}>👍 Like {like}</button> */}
+    <Button variant="contained" onClick={() => setLike(like + 1)}>👍 Like {like}</Button>
+    {/* <button onClick={() => setDislike(dislike + 1)}>👎 Dislike {dislike}</button> */}
+    <Button variant="contained" onClick={() => setDislike(dislike + 1)}>👎 Dislike {dislike}</Button>
   </div>
 }
 

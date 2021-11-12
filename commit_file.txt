@@ -1,2 +1,5 @@
 Task on 31/10/2021:
 update movie list with form for user input name, rating, summary, poster
+
+Task on 06.11.2021:
+Using material UI changed the ui of the page
