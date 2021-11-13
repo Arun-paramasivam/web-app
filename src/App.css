@@ -81,11 +81,20 @@ body{
   /* grid-gap: 24px; */
   gap: 24px;
   justify-content: space-evenly;
-  flex-wrap: wrap
+  flex-wrap: wrap;
+  margin-top: 10px;
 }
 
 .counter-container {
   display: flex;
   grid-gap: 10px;
   gap: 10px;
+}
+
+.add-movie-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 24px;
+  width: '100%';
 }

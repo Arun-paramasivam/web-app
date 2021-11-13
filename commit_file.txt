@@ -3,3 +3,6 @@ update movie list with form for user input name, rating, summary, poster
 
 Task on 06.11.2021:
 Using material UI changed the ui of the page
+
+07.11.2021:
+useHistory(), useParams(), dynamic history push for page navigation.

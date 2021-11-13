@@ -1,8 +1,14 @@
 import './App.css';
 import { useState } from 'react';
-import { Button, IconButton, TextField } from '@mui/material';
+import { Button, IconButton, TextField, Badge, Card, CardActions, CardContent } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-
+import { Switch, Route, Link, Redirect, useParams, useHistory } from 'react-router-dom'
+import { ColorComponent } from './color-component';
+import { MovieList } from './movie-list';
+import { INITIAL_MOVIES } from './INITIAL_MOVIES';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import InfoIcon from '@mui/icons-material/Info';
 // const movies = [
 //   {
 //     name: 'Avengers: Endgame',
@@ -12,87 +18,18 @@ import DeleteIcon from '@mui/icons-material/Delete';
 //   }
 // ]
 
-const movies = [
-  {
-    name: "Interstellar",
-    image:
-      "https://upload.wikimedia.org/wikipedia/en/b/bc/Interstellar_film_poster.jpg",
-    summary: `Earth's future has been riddled by disasters, famines, and droughts. There is only one way to ensure mankind's survival: Interstellar travel. A newly discovered wormhole in the far reaches of our solar system allows a team of astronauts to go where no man has gone before, a planet that may have the right environment to sustain human life`,
-    rating: "8.6"
-  },
-  {
-    name: "Geetha Govindham",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BOTE1ZDA3NDEtMDZlNS00MjlkLWFmNzAtYzVmYWJmMzEwMDVlXkEyXkFqcGdeQXVyMTA4NjE0NjEy._V1_.jpg",
-    summary: `Vijay Govind, a young college lecturer who dreams of marriage falls for Geetha, a level-headed woman who's wary of strangers and isn't easy to convince. While things seem to go smoothly, Vijay makes a terrible mistake which not only derails any hope for his love story, but also potential repercussions with his family`,
-    rating: "7.7"
-  },
-  {
-    name: "Avenger",
-    image:
-      "https://terrigen-cdn-dev.marvel.com/content/prod/1x/avengersendgame_lob_crd_05.jpg",
-    summary: `Earth's future has been riddled by disasters, famines, and droughts. There is only one way to ensure mankind's survival: Interstellar travel. A newly discovered wormhole in the far reaches of our solar system allows a team of astronauts to go where no man has gone before, a planet that may have the right environment to sustain human life`,
-    rating: "8.4"
-  },
-  {
-    name: "Titanic",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BMDdmZGU3NDQtY2E5My00ZTliLWIzOTUtMTY4ZGI1YjdiNjk3XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-    summary: `84 years later, a 100 year-old woman named Rose DeWitt Bukater tells the story to her granddaughter Lizzy Calvert, Brock Lovett, Lewis Bodine, Bobby Buell and Anatoly Mikailavich on the Keldysh about her life set in April 10th 1912, on a ship called Titanic when young Rose boards the departing ship with the upper-class passengers and her mother, Ruth DeWitt Bukater, and her fiancé, Caledon Hockley. Meanwhile, a drifter and artist named Jack Dawson and his best friend Fabrizio De Rossi win third-class tickets to the ship in a game. And she explains the whole story from departure until the death of Titanic on its first and last voyage April 15th, 1912 at 2:20 in the morning`,
-    rating: "7.8"
-  },
-  {
-    name: "Matrix",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg",
-    summary: `Thomas A. Anderson is a man living two lives. By day he is an average computer programmer and by night a hacker known as Neo. Neo has always questioned his reality, but the truth is far beyond his imagination. Neo finds himself targeted by the police when he is contacted by Morpheus, a legendary computer hacker branded a terrorist by the government. As a rebel against the machines, Neo must confront the agents: super-powerful computer programs devoted to stopping Neo and the entire human rebellion`,
-    rating: "8.7"
-  }
-];
 
-const MovieList = (props) => {
-  const { movies } = props
-  return <div className="movie-list">
-    {movies.map((item, index) => {
-      return <Movie key={item?.name + index} index {...item} />
-    })}
-  </div>
-}
 
-const Movie = (props) => {
-  const { name, image, rating, summary } = props
-  const [showDescription, setShowDescription] = useState(true)
-  return <div className="movie-container">
-    <img className="movie-poster" src={image} alt="img" />
-    <div className="movie-specs">
-      <h3 className="movie-name">
-        {name}
-      </h3>
-      <p className="movie-rating">
-        ⭐️ {rating}
-      </p>
-    </div>
-    <p className="movie-summary">
-      {showDescription && summary}
-    </p>
 
-    {/* <button style={{ margin: 10 }} onClick={() => setShowDescription(!showDescription)}>{showDescription ? 'Hide' : 'Show'} Description</button> */}
-    <Button variant="contained" style={{ margin: 10 }} onClick={() => setShowDescription(!showDescription)}>{showDescription ? 'Hide' : 'Show'} Description</Button>
-    <div style={{ display: 'flex' }}>
-      <LikeButton />
-    </div>
-  </div>
-}
 
 function App() {
-  const [colorList, setColorList] = useState([])
+
+
   const [name, setName] = useState('')
   const [rating, setRating] = useState('')
   const [poster, setPoster] = useState('')
   const [description, setDescription] = useState('')
-  const [movieList, setMovieList] = useState(movies)
-
-  const [backgroundColor, setBackgroundColor] = useState('')
+  const [movieList, setMovieList] = useState(INITIAL_MOVIES)
 
   const onSubmit = () => {
     if (name && rating && poster && description) {
@@ -114,88 +51,101 @@ function App() {
     }
   }
 
+
   return (
     <div className="App">
+      <ul>
+        <li><Link to="/" >Home</Link></li>
+        <li><Link to="/movie">Movie</Link></li>
+        <li><Link to="/color-game">Color</Link></li>
+      </ul>
 
-      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-        <label>
-          {/* Name: */}
-          {/* <input type="text" value={name} onChange={event => {
-            setName(event.target.value)
-          }} /> */}
-          <TextField id="standard-basic" label="Name" variant="standard" type="text" value={name}  onChange={event => {
-            setName(event.target.value)
-          }} />
-        </label>
-        <br />
+      <Switch>
+        <Route exact path="/">
+          <HomeComponent />
+        </Route>
+        <Route path="/films">
+          <Redirect to="/movie" />
+        </Route>
+        <Route path="/movie/:id">
+          {/* <MovieComponent /> */}
+          <MovieDetails movies={movieList} />
+        </Route>
+        <Route path="/movie">
+          <div>
+            <div className="add-movie-form">
+              <TextField id="standard-basic" label="Name" variant="standard" type="text" value={name} onChange={event => {
+                setName(event.target.value)
+              }} />
+              <TextField id="standard-basic" label="Poster" variant="standard" value={poster} onChange={event => {
+                setPoster(event.target.value)
+              }} />
+              <TextField id="standard-basic" label="Description" variant="standard" type="text" value={description} onChange={event => {
+                setDescription(event.target.value)
+              }} />
+              <TextField id="standard-basic" label="Rating" variant="standard" type="text" value={rating} onChange={event => {
+                setRating(event.target.value)
+              }} />
+              <Button variant="contained" style={{ marginTop: 10 }} onClick={() => onSubmit()}>Add Movie</Button>
+            </div>
 
-        <label>
-          {/* Poster: */}
-          {/* <input type="text" value={poster} onChange={event => {
-            setPoster(event.target.value)
-          }} /> */}
-          <TextField id="standard-basic" label="Poster" variant="standard" value={poster} onChange={event => {
-            setPoster(event.target.value)
-          }} />
-        </label>
-        <br />
+            <MovieList movies={movieList} />
 
-        <label>
-          {/* Description: */}
-          {/* <input type="text" value={description} onChange={event => {
-            setDescription(event.target.value)
-          }} /> */}
-          <TextField id="standard-basic" label="Description" variant="standard" type="text" value={description} onChange={event => {
-            setDescription(event.target.value)
-          }} />
-        </label>
-        <br />
-
-        <label>
-          {/* Rating:
-          <input type="text" value={rating} onChange={event => {
-            setRating(event.target.value)
-          }} /> */}
-          <TextField id="standard-basic" label="Rating" variant="standard" type="text" value={rating} onChange={event => {
-            setRating(event.target.value)
-          }} />
-        </label>
-        {/* <input style={{ marginTop: 10 }} type="submit" value="Submit" onClick={() => onSubmit()} /> */}
-        <Button variant="contained" style={{ marginTop: 10 }} onClick={() => onSubmit()}>Add Movie</Button>
-        {/* <IconButton aria-label="delete">
-          <DeleteIcon />
-        </IconButton> */}
-      </div>
-
-
-      <MovieList movies={movieList} />
-
-      {/* <input style={{ backgroundColor }} onChange={event => {
-        setBackgroundColor(event.target.value)
-      }} />
-      <button onClick={() => setColorList([...colorList, backgroundColor])}>Add Color</button>
-
-      {colorList.map(item => <ColorBox color={item} />)} */}
+          </div>
+        </Route>
+        <Route path="/color-game">
+          <ColorComponent />
+        </Route>
+        <Route path="**">
+          <NotFound />
+        </Route>
+      </Switch>
 
     </div>
   );
 }
 
-const ColorBox = (props) => {
-  const { color } = props
-  return <div style={{ height: 200, width: 400, backgroundColor: color, margin: 10 }} />
-}
 
-const LikeButton = () => {
-  const [like, setLike] = useState(0)
-  const [dislike, setDislike] = useState(0)
-  return <div className="counter-container">
-    {/* <button onClick={() => setLike(like + 1)}>👍 Like {like}</button> */}
-    <Button variant="contained" onClick={() => setLike(like + 1)}>👍 Like {like}</Button>
-    {/* <button onClick={() => setDislike(dislike + 1)}>👎 Dislike {dislike}</button> */}
-    <Button variant="contained" onClick={() => setDislike(dislike + 1)}>👎 Dislike {dislike}</Button>
+
+
+
+const HomeComponent = () => {
+  return <div>
+    Welcome to Web app!!!
   </div>
 }
+
+const NotFound = () => {
+  return <div>
+    <img src="https://i.pinimg.com/originals/fe/df/71/fedf7125acf620e856b6d09ef44eee51.gif" />
+  </div>
+}
+
+const MovieDetails = (props) => {
+  const { id } = useParams()
+  const { movies } = props
+  const movie = movies[id]
+  const { name, image, summary, rating, trailer } = movie
+  console.log('trailer', trailer)
+  return <div className="movie-container">
+    <iframe width="820" height="461" src={trailer} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <CardContent>
+      <div className="movie-specs">
+        <h3 className="movie-name">
+          {name}
+        </h3>
+        <p className="movie-rating">
+          ⭐️ {rating}
+        </p>
+      </div>
+      <p className="movie-summary">
+        {summary}
+      </p>
+    </CardContent>
+  </div>
+}
+
+
 
 
 
