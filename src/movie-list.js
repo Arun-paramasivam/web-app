@@ -4,25 +4,37 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useHistory } from 'react-router-dom';
 import InfoIcon from '@mui/icons-material/Info';
-
-// export const MovieComponent = () => {
-
-    
-
-// }
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 export const MovieList = (props) => {
-    const { movies } = props
+    const { movies, setMovies } = props
+    const history = useHistory()
     return <div className="movie-list">
         {movies.map((item, index) => {
-            return <Movie key={item?.name + index} index={index} {...item} />
+            return <Movie
+                key={item?.name + index}
+                index={index}
+                {...item}
+                deleteButton={<IconButton color="error" aria-label="delete" onClick={() => {
+                    let newMoviesList = movies.filter((item, i) => i !== index)
+                    setMovies([...newMoviesList])
+                }}>
+                    <DeleteIcon />
+                </IconButton>}
+                editButton={<IconButton color="primary" onClick={() => {
+                    history.push(`movies/edit/${index}`)
+                }}>
+                    <EditIcon />
+                </IconButton>}
+            />
         })}
     </div>
 }
 
 
 const Movie = (props) => {
-    const { name, image, rating, summary, index } = props
+    const { name, image, rating, description, index, deleteButton, editButton } = props
     const [showDescription, setShowDescription] = useState(true)
     const history = useHistory()
     return <Card className="movie-container">
@@ -34,7 +46,7 @@ const Movie = (props) => {
                     <IconButton color="primary" onClick={() => setShowDescription(!showDescription)}>
                         {showDescription ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                     </IconButton>
-                    <IconButton color="primary" onClick={() => history.push(`/movie/${index}`)}>
+                    <IconButton color="primary" onClick={() => history.push(`/movies/${index}`)}>
                         <InfoIcon />
                     </IconButton>
                 </h3>
@@ -42,14 +54,13 @@ const Movie = (props) => {
                     ⭐️ {rating}
                 </p>
             </div>
-            <p className="movie-summary">
-                {showDescription && summary}
+            <p className="movie-description">
+                {showDescription && description}
             </p>
-
-            {/* <button style={{ margin: 10 }} onClick={() => setShowDescription(!showDescription)}>{showDescription ? 'Hide' : 'Show'} Description</button> */}
-            {/* <Button variant="contained" style={{ margin: 10 }} onClick={() => setShowDescription(!showDescription)}>{showDescription ? 'Hide' : 'Show'} Description</Button> */}
             <CardActions>
                 <LikeButton />
+                {deleteButton}
+                {editButton}
             </CardActions>
         </CardContent>
     </Card>
