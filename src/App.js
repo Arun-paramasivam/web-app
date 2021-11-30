@@ -1,6 +1,6 @@
 import './App.css';
 import { createContext, useEffect, useState } from 'react';
-import { Button, IconButton, TextField, Badge, Card, CardActions, CardContent, AppBar, Toolbar, Typography } from '@mui/material';
+import { Button, IconButton, TextField, Badge, Card, CardActions, CardContent, AppBar, Toolbar, Typography, Paper } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Switch, Route, Link, Redirect, useParams, useHistory } from 'react-router-dom'
 import { ColorComponent } from './color-component';
@@ -11,6 +11,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import InfoIcon from '@mui/icons-material/Info';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import MenuIcon from '@mui/icons-material/Menu'
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 // const movies = [
 //   {
 //     name: 'Avengers: Endgame',
@@ -28,71 +31,101 @@ function App() {
 
   const [movies, setMovies] = useState(INITIAL_MOVIES)
   const history = useHistory()
+
+  const [mode, setMode] = useState('light')
+  const theme = createTheme({
+    palette: {
+      mode: mode,
+    },
+  })
+
+  const paperStyle = {
+    borderRadius: 0,
+    minHeight: '100vh'
+  }
+
+  // useEffect(() => {
+
+  // }, [mode])
+
   return (
-    <div className="App">
-      {/* <ul>
+    <ThemeProvider theme={theme}>
+      <Paper elevation={3} style={paperStyle}>
+        <div className="App">
+          {/* <ul>
         <li><Link to="/" >Home</Link></li>
         <li><Link to="/movies">Movie</Link></li>
         <li><Link to="/movies/add">Add Movie</Link></li>
         <li><Link to="/color-game">Color</Link></li>
       </ul> */}
 
-      <AppBar position="static">
-        <Toolbar>
-          <Button onClick={() => history.push('/')} size="large" color="inherit" aria-label="home">
-            Home
-          </Button>
-          <Button onClick={() => history.push('/movies')} size="large" color="inherit" aria-label="home">
-            Movie
-          </Button>
-          <Button onClick={() => history.push('/movies/add')} size="large" color="inherit" aria-label="home">
-            Add Movie
-          </Button>
-          {/* <Button onClick={() => history.push('/color-game')} size="large" color="inherit" aria-label="home">
+          <AppBar position="static">
+            <Toolbar>
+              <Button onClick={() => history.push('/')} size="large" color="inherit" aria-label="home">
+                Home
+              </Button>
+              <Button onClick={() => history.push('/movies')} size="large" color="inherit" aria-label="home">
+                Movie
+              </Button>
+              <Button onClick={() => history.push('/movies/add')} size="large" color="inherit" aria-label="home">
+                Add Movie
+              </Button>
+              {/* <Button onClick={() => history.push('/color-game')} size="large" color="inherit" aria-label="home">
             Color
           </Button> */}
-          {/* <Button color="inherit">Login</Button> */}
-        </Toolbar>
-      </AppBar>
-      <div style={{ margin: 20 }}>
-        <Switch>
-          <Route exact path="/">
-            <HomeComponent />
-          </Route>
+              {/* <Button color="inherit">Login</Button> */}
+              <Button 
+              style={{marginLeft: 'auto'}} 
+              startIcon={() => mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
+              onClick={() => mode === 'light' ? setMode('dark') : setMode('light')} 
+              size="large" 
+              color="inherit" 
+              aria-label="home">
+                {mode === 'dark' ? <LightModeIcon style={{marginRight: 5}}/> : <DarkModeIcon style={{marginRight: 5}}/>}{mode === 'light' ? 'Dark' : 'Light'} Mode
+              </Button>
+            </Toolbar>
+          </AppBar>
+          <div style={{ margin: 20 }}>
+            <Switch>
+              <Route exact path="/">
+                <HomeComponent />
+              </Route>
 
-          <Route path="/films">
-            <Redirect to="/movies" />
-          </Route>
+              <Route path="/films">
+                <Redirect to="/movies" />
+              </Route>
 
-          <Route exact path="/movies/add">
-            <AddMovie movies={movies} setMovies={setMovies} />
-          </Route>
+              <Route exact path="/movies/add">
+                <AddMovie movies={movies} setMovies={setMovies} />
+              </Route>
 
-          <Route exact path="/movies/:id">
-            <MovieDetails movies={movies} setMovies={setMovies} />
-          </Route>
+              <Route exact path="/movies/:id">
+                <MovieDetails movies={movies} setMovies={setMovies} />
+              </Route>
 
-          <Route exact path="/movies/edit/:id">
-            <AddMovie movies={movies} setMovies={setMovies} />
-          </Route>
+              <Route exact path="/movies/edit/:id">
+                <AddMovie movies={movies} setMovies={setMovies} />
+              </Route>
 
-          <Route exact path="/movies">
-            <MovieList movies={movies} setMovies={setMovies} />
-          </Route>
+              <Route exact path="/movies">
+                <MovieList movies={movies} setMovies={setMovies} />
+              </Route>
 
-          <Route path="/color-game">
-            <ColorComponent />
-          </Route>
+              <Route path="/color-game">
+                <ColorComponent />
+              </Route>
 
-          <Route path="**">
-            <NotFound />
-          </Route>
-        </Switch>
-      </div>
+              <Route path="**">
+                <NotFound />
+              </Route>
+            </Switch>
+          </div>
 
 
 
-    </div>
+        </div>
+      </Paper>
+    </ThemeProvider>
   );
 }
 
