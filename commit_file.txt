@@ -12,3 +12,7 @@ didn't do the task on 07.11.2021(ie CRUD on movie list)
 
 13.11.2021:
 CRUD operations discussed with hands on practise during this class
+
+30.11.2021:
+CRUD operations done with material ui for task submission
+Context is discussed too at this point. Next task related to light/dark theme using context.

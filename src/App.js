@@ -1,6 +1,6 @@
 import './App.css';
-import { useEffect, useState } from 'react';
-import { Button, IconButton, TextField, Badge, Card, CardActions, CardContent } from '@mui/material';
+import { createContext, useEffect, useState } from 'react';
+import { Button, IconButton, TextField, Badge, Card, CardActions, CardContent, AppBar, Toolbar, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Switch, Route, Link, Redirect, useParams, useHistory } from 'react-router-dom'
 import { ColorComponent } from './color-component';
@@ -10,6 +10,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import InfoIcon from '@mui/icons-material/Info';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import MenuIcon from '@mui/icons-material/Menu'
 // const movies = [
 //   {
 //     name: 'Avengers: Endgame',
@@ -20,55 +21,76 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 // ]
 
 
-
+const context = createContext({})
 
 
 function App() {
 
   const [movies, setMovies] = useState(INITIAL_MOVIES)
-
+  const history = useHistory()
   return (
     <div className="App">
-      <ul>
+      {/* <ul>
         <li><Link to="/" >Home</Link></li>
         <li><Link to="/movies">Movie</Link></li>
         <li><Link to="/movies/add">Add Movie</Link></li>
         <li><Link to="/color-game">Color</Link></li>
-      </ul>
+      </ul> */}
 
-      <Switch>
-        <Route exact path="/">
-          <HomeComponent />
-        </Route>
+      <AppBar position="static">
+        <Toolbar>
+          <Button onClick={() => history.push('/')} size="large" color="inherit" aria-label="home">
+            Home
+          </Button>
+          <Button onClick={() => history.push('/movies')} size="large" color="inherit" aria-label="home">
+            Movie
+          </Button>
+          <Button onClick={() => history.push('/movies/add')} size="large" color="inherit" aria-label="home">
+            Add Movie
+          </Button>
+          {/* <Button onClick={() => history.push('/color-game')} size="large" color="inherit" aria-label="home">
+            Color
+          </Button> */}
+          {/* <Button color="inherit">Login</Button> */}
+        </Toolbar>
+      </AppBar>
+      <div style={{ margin: 20 }}>
+        <Switch>
+          <Route exact path="/">
+            <HomeComponent />
+          </Route>
 
-        <Route path="/films">
-          <Redirect to="/movies" />
-        </Route>
+          <Route path="/films">
+            <Redirect to="/movies" />
+          </Route>
 
-        <Route exact path="/movies/add">
-          <AddMovie movies={movies} setMovies={setMovies} />
-        </Route>
+          <Route exact path="/movies/add">
+            <AddMovie movies={movies} setMovies={setMovies} />
+          </Route>
 
-        <Route exact path="/movies/:id">
-          <MovieDetails movies={movies} setMovies={setMovies} />
-        </Route>
+          <Route exact path="/movies/:id">
+            <MovieDetails movies={movies} setMovies={setMovies} />
+          </Route>
 
-        <Route exact path="/movies/edit/:id">
-          <AddMovie movies={movies} setMovies={setMovies} />
-        </Route>
+          <Route exact path="/movies/edit/:id">
+            <AddMovie movies={movies} setMovies={setMovies} />
+          </Route>
 
-        <Route exact path="/movies">
-          <MovieList movies={movies} setMovies={setMovies} />
-        </Route>
+          <Route exact path="/movies">
+            <MovieList movies={movies} setMovies={setMovies} />
+          </Route>
 
-        <Route path="/color-game">
-          <ColorComponent />
-        </Route>
+          <Route path="/color-game">
+            <ColorComponent />
+          </Route>
 
-        <Route path="**">
-          <NotFound />
-        </Route>
-      </Switch>
+          <Route path="**">
+            <NotFound />
+          </Route>
+        </Switch>
+      </div>
+
+
 
     </div>
   );
@@ -80,7 +102,7 @@ function App() {
 
 const HomeComponent = () => {
   return <div>
-    Welcome to Web app!!!
+    Welcome to Movie CRUD app!!!
   </div>
 }
 

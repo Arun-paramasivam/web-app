@@ -22,9 +22,11 @@ export const MovieList = (props) => {
                 }}>
                     <DeleteIcon />
                 </IconButton>}
-                editButton={<IconButton color="primary" onClick={() => {
-                    history.push(`movies/edit/${index}`)
-                }}>
+                editButton={<IconButton
+                    color="primary"
+                    onClick={() => {
+                        history.push(`movies/edit/${index}`)
+                    }}>
                     <EditIcon />
                 </IconButton>}
             />
@@ -59,8 +61,10 @@ const Movie = (props) => {
             </p>
             <CardActions>
                 <LikeButton />
-                {deleteButton}
-                {editButton}
+                <div style={{ marginLeft: 'auto', flexDirection: 'row' }}>
+                    {deleteButton}
+                    {editButton}
+                </div>
             </CardActions>
         </CardContent>
     </Card>
