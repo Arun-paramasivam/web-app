@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Badge, Button, Card, CardActions, CardContent, IconButton, TextField } from '@mui/material';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -8,24 +8,48 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
 export const MovieList = (props) => {
-    const { movies, setMovies } = props
+    // const { movies } = props
     const history = useHistory()
+    const [movies, setMovies] = useState([])
+    const getMoviesApi = async () => {
+        const response = await fetch('https://61ab1cb7bfb110001773f3b4.mockapi.io/movies').then(res => res.json())
+        // console.log('response', response)
+        setMovies(response)
+    }
+
+    useEffect(() => {
+        getMoviesApi()
+    }, [])
+
+    useEffect(() => {
+        // console.log('here3')
+    }, [movies])
+
+
+    const deleteMovie = async (id) => {
+        const response = await fetch(`https://61ab1cb7bfb110001773f3b4.mockapi.io/movies/${id}`, {
+            method: 'DELETE'
+        }).then(res => res.json())
+        if (response)
+            getMoviesApi()
+    }
+    
     return <div className="movie-list">
         {movies.map((item, index) => {
             return <Movie
                 key={item?.name + index}
-                index={index}
                 {...item}
                 deleteButton={<IconButton color="error" aria-label="delete" onClick={() => {
-                    let newMoviesList = movies.filter((item, i) => i !== index)
-                    setMovies([...newMoviesList])
+                    // let newMoviesList = movies.filter((item, i) => i !== index)
+                    // setMovies([...newMoviesList])
+                    deleteMovie(item?.id)
                 }}>
                     <DeleteIcon />
                 </IconButton>}
                 editButton={<IconButton
                     color="primary"
                     onClick={() => {
-                        history.push(`movies/edit/${index}`)
+                        history.push(`movies/edit/${item.id}`)
                     }}>
                     <EditIcon />
                 </IconButton>}
@@ -36,11 +60,11 @@ export const MovieList = (props) => {
 
 
 const Movie = (props) => {
-    const { name, image, rating, description, index, deleteButton, editButton } = props
+    const { name, poster, rating, description, id, deleteButton, editButton } = props
     const [showDescription, setShowDescription] = useState(true)
     const history = useHistory()
     return <Card className="movie-container">
-        <img className="movie-poster" src={image} alt="img" />
+        <img className="movie-poster" src={poster} alt="img" />
         <CardContent>
             <div className="movie-specs">
                 <h3 className="movie-name">
@@ -48,7 +72,7 @@ const Movie = (props) => {
                     <IconButton color="primary" onClick={() => setShowDescription(!showDescription)}>
                         {showDescription ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                     </IconButton>
-                    <IconButton color="primary" onClick={() => history.push(`/movies/${index}`)}>
+                    <IconButton color="primary" onClick={() => history.push(`/movies/${id}`)}>
                         <InfoIcon />
                     </IconButton>
                 </h3>

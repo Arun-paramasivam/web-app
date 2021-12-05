@@ -21,3 +21,6 @@ Context is discussed too at this point. Next task related to light/dark theme us
 30.11.2021:
 for session date 20.11.2021
 Dark theme completed with help of material ui theme context
+
+05.12.2021:
+Completed Form validation in movie app using mockapi for apis, Formik and yup for validation

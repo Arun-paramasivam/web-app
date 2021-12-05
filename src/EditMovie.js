@@ -1,38 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Button, IconButton, TextField, Badge, Card, CardActions, CardContent } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { Switch, Route, Link, Redirect, useParams, useHistory } from 'react-router-dom'
+import { Button, TextField } from '@mui/material';
 import * as yup from 'yup'
 import { useFormik } from "formik";
-import { EditMovie } from './EditMovie';
+import { Switch, Route, Link, Redirect, useParams, useHistory } from 'react-router-dom'
+import { formValidationSchema } from './AddMovie';
 
-export const formValidationSchema = yup.object({
-    name: yup
-        .string()
-        // .min(5, 'need bigger mail')
-        // .matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, 'enter valid email')
-        .required('fill this name'),
-    poster: yup
-        .string()
-        .min(4)
-        // .max(12, 'need smaller password')
-        .required('fill this poster'),
-    description: yup
-        .string()
-        .min(20)
-        .required('fill this summary'),
-    rating: yup
-        .number()
-        .min(0)
-        .max(10)
-        .required('fill this rating'),
-    trailer: yup
-        .string()
-        .min(4)
-        .required('fill this trailer'),
-})
-
-export const AddMovie = (props) => {
+export const EditMovie = (props) => {
+    const { id } = useParams()
     // const [name, setName] = useState('')
     // const [rating, setRating] = useState('')
     // const [poster, setPoster] = useState('')
@@ -41,10 +15,47 @@ export const AddMovie = (props) => {
     const history = useHistory()
     const [movie, setMovie] = useState({})
 
+    useEffect(() => {
+        //=> if its edit
+        if (id) {
+            getSingleMovieApi(id)
+        }
+    }, [])
+
+    // useEffect(() => {
+    //     console.log('movie', movie)
+    // }, [movie])
+
+
+    const getSingleMovieApi = async () => {
+        await fetch(`https://61ab1cb7bfb110001773f3b4.mockapi.io/movies/${id}`, {
+            method: 'GET',
+        }).then(res => res.json()).then(response => {
+            // console.log('response', response)
+            // if (response) {
+            // setName(response?.name)
+            // setRating(response?.rating)
+            // setDescription(response?.description)
+            // setPoster(response?.image)
+            // setTrailer(response?.trailer)
+            setMovie({ name: response.name, poster: response.poster, description: response.description, rating: response.rating, trailer: response.trailer })
+            // }
+        })
+
+    }
+
     const addMovieApi = async (params) => {
         await fetch(`https://61ab1cb7bfb110001773f3b4.mockapi.io/movies`, {
             headers: { "Content-type": "application/json" },
             method: 'POST',
+            body: JSON.stringify(params)
+        }).then(() => history.push('/movies'))
+    }
+
+    const updateMovieApi = async (params) => {
+        await fetch(`https://61ab1cb7bfb110001773f3b4.mockapi.io/movies/${id}`, {
+            headers: { "Content-type": "application/json" },
+            method: 'PUT',
             body: JSON.stringify(params)
         }).then(() => history.push('/movies'))
     }
@@ -67,34 +78,49 @@ export const AddMovie = (props) => {
                 description,
                 trailer
             }
-            addMovieApi(params)
+
+            //=> if id is available then its edit
+            if (id) {
+                // let tempMovies = [...movies]
+                // tempMovies[id] = params
+                // setMovies([...tempMovies])
+                updateMovieApi(params)
+            } else {
+                // movies.push(params)
+                // setMovies([...movies])
+                addMovieApi(params)
+            }
+
             resetValues()
+        } else {
+            alert('Please fill all the fields')
         }
     }
 
+    return movie.name ? <UpdateMovie movie={movie} onSubmit={onSubmit} /> : "";
+};
 
-
-
+const UpdateMovie = (props) => {
+    const { movie, onSubmit } = props
     const formik = useFormik({
-        initialValues: { name: '', poster: '', description: '', rating: '', trailer: '' },
+        initialValues: { name: movie.name, poster: movie.poster, description: movie.description, rating: movie.rating, trailer: movie.trailer },
         // validate: formValidate,
         validationSchema: formValidationSchema,
         onSubmit: onSubmit
-    })
-    const { handleChange, handleSubmit, handleBlur, values, errors, touched } = formik
-    const { name, poster, description, rating, trailer } = values
+    });
+    const { handleChange, handleSubmit, handleBlur, values, errors, touched } = formik;
+    const { name, poster, description, rating, trailer } = values;
 
     return <div>
         <div className="add-movie-form">
-            <TextField id="standard-basic" label="Name" variant="standard" type="text"
+            <TextField id="name" label="Name" variant="standard" type="text"
                 name='name'
                 value={name}
                 placeholder='Enter Movie name'
                 onBlur={handleBlur}
                 onChange={handleChange}
                 error={errors.name && touched.name}
-                helperText={errors.name}
-            />
+                helperText={errors.name} />
             {/* {errors.name && touched ? errors.name : ''} */}
             <TextField id="standard-basic" label="Poster" variant="standard"
                 name='poster'
@@ -132,12 +158,10 @@ export const AddMovie = (props) => {
                 error={errors.trailer && touched.trailer}
                 helperText={errors.trailer} />
             {/* {errors.trailer && touched ? errors.trailer : ''} */}
-            <Button variant="contained" style={{ marginTop: 10 }} onClick={() => handleSubmit()}>Add Movie</Button>
+            <Button variant="contained" style={{ marginTop: 10 }} onClick={() => handleSubmit()}>Edit Movie</Button>
         </div>
 
 
 
-    </div>
-
+    </div>;
 }
-

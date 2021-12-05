@@ -14,6 +14,9 @@ import MenuIcon from '@mui/icons-material/Menu'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
+import { AddMovie } from './AddMovie';
+import { BasicForm } from './BasicForm';
+import { EditMovie } from './EditMovie';
 // const movies = [
 //   {
 //     name: 'Avengers: Endgame',
@@ -29,7 +32,7 @@ const context = createContext({})
 
 function App() {
 
-  const [movies, setMovies] = useState(INITIAL_MOVIES)
+  const [movies, setMovies] = useState([])
   const history = useHistory()
 
   const [mode, setMode] = useState('light')
@@ -44,9 +47,14 @@ function App() {
     minHeight: '100vh'
   }
 
-  // useEffect(() => {
-
-  // }, [mode])
+  const getMoviesApi = async () => {
+    const response = await fetch('https://61ab1cb7bfb110001773f3b4.mockapi.io/movies').then(res => res.json())
+    // console.log('response', response)
+    setMovies(response)
+  }
+  useEffect(() => {
+    getMoviesApi()
+  }, [])
 
   return (
     <ThemeProvider theme={theme}>
@@ -70,18 +78,21 @@ function App() {
               <Button onClick={() => history.push('/movies/add')} size="large" color="inherit" aria-label="home">
                 Add Movie
               </Button>
+              <Button onClick={() => history.push('/basic-form')} size="large" color="inherit" aria-label="home">
+                Basic Form
+              </Button>
               {/* <Button onClick={() => history.push('/color-game')} size="large" color="inherit" aria-label="home">
             Color
           </Button> */}
               {/* <Button color="inherit">Login</Button> */}
-              <Button 
-              style={{marginLeft: 'auto'}} 
-              startIcon={() => mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
-              onClick={() => mode === 'light' ? setMode('dark') : setMode('light')} 
-              size="large" 
-              color="inherit" 
-              aria-label="home">
-                {mode === 'dark' ? <LightModeIcon style={{marginRight: 5}}/> : <DarkModeIcon style={{marginRight: 5}}/>}{mode === 'light' ? 'Dark' : 'Light'} Mode
+              <Button
+                style={{ marginLeft: 'auto' }}
+                startIcon={() => mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
+                onClick={() => mode === 'light' ? setMode('dark') : setMode('light')}
+                size="large"
+                color="inherit"
+                aria-label="home">
+                {mode === 'dark' ? <LightModeIcon style={{ marginRight: 5 }} /> : <DarkModeIcon style={{ marginRight: 5 }} />}{mode === 'light' ? 'Dark' : 'Light'} Mode
               </Button>
             </Toolbar>
           </AppBar>
@@ -96,23 +107,27 @@ function App() {
               </Route>
 
               <Route exact path="/movies/add">
-                <AddMovie movies={movies} setMovies={setMovies} />
+                <AddMovie />
               </Route>
 
               <Route exact path="/movies/:id">
-                <MovieDetails movies={movies} setMovies={setMovies} />
+                <MovieDetails />
               </Route>
 
               <Route exact path="/movies/edit/:id">
-                <AddMovie movies={movies} setMovies={setMovies} />
+                <EditMovie />
               </Route>
 
               <Route exact path="/movies">
-                <MovieList movies={movies} setMovies={setMovies} />
+                <MovieList />
               </Route>
 
               <Route path="/color-game">
                 <ColorComponent />
+              </Route>
+
+              <Route path="/basic-form">
+                <BasicForm />
               </Route>
 
               <Route path="**">
@@ -149,10 +164,32 @@ const MovieDetails = (props) => {
   const { id } = useParams()
   const history = useHistory()
   //=> if not valid index push to 404
-  const { movies } = props
-  const movie = movies[id]
-  const { name, image, description, rating, trailer } = movie || {}
-  console.log('MovieDetails', movies)
+  const [movie, setMovie] = useState({})
+  // const { movies } = props
+  // const movie = movies[id]
+  const [name, setName] = useState('')
+  const [poster, setPoster] = useState('')
+  const [description, setDescription] = useState('')
+  const [rating, setRating] = useState(0)
+  const [trailer, setTrailer] = useState('')
+  // console.log('MovieDetails', movies)
+  const getMovie = async (id) => {
+    const response = await fetch(`https://61ab1cb7bfb110001773f3b4.mockapi.io/movies/${id}`).then(res => res.json())
+    console.log('response', response)
+    setMovie(response)
+    if (response) {
+      const { name, poster, description, rating, trailer } = response || {}
+      setName(name)
+      setPoster(poster)
+      setDescription(description)
+      setRating(rating)
+      setTrailer(trailer)
+    }
+  }
+  useEffect(() => {
+    getMovie(id)
+  }, [id])
+
   return <div className="movie-container">
     <iframe width="820" height="461" src={trailer} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     <CardContent>
@@ -173,89 +210,6 @@ const MovieDetails = (props) => {
     </CardContent>
   </div>
 }
-
-const AddMovie = ({ movies, setMovies }) => {
-  const { id } = useParams()
-  const [name, setName] = useState('')
-  const [rating, setRating] = useState('')
-  const [poster, setPoster] = useState('')
-  const [description, setDescription] = useState('')
-  const [trailer, setTrailer] = useState('')
-  const history = useHistory()
-
-  useEffect(() => {
-    if (id) {
-      const { name, rating, image, description, trailer } = movies[id]
-
-      setName(name)
-      setRating(rating)
-      setPoster(image)
-      setDescription(description)
-      setTrailer(trailer)
-    }
-  }, [id, movies])
-
-  const resetValues = () => {
-    setName('')
-    setPoster('')
-    setDescription('')
-    setRating('')
-    setTrailer('')
-    history.push('/movies')
-  }
-
-  const onSubmit = () => {
-    if (name && rating && poster && description) {
-      let params = {
-        name,
-        image: poster,
-        rating,
-        description: description,
-        trailer
-      }
-
-      //=> if id is available then its edit
-      if (id) {
-        let tempMovies = [...movies]
-        tempMovies[id] = params
-        setMovies([...tempMovies])
-      } else {
-        movies.push(params)
-        setMovies([...movies])
-      }
-
-      resetValues()
-    } else {
-      alert('Please fill all the fields')
-    }
-  }
-
-  return <div>
-    <div className="add-movie-form">
-      <TextField id="standard-basic" label="Name" variant="standard" type="text" value={name} onChange={event => {
-        setName(event.target.value)
-      }} />
-      <TextField id="standard-basic" label="Poster" variant="standard" value={poster} onChange={event => {
-        setPoster(event.target.value)
-      }} />
-      <TextField id="standard-basic" label="Description" variant="standard" type="text" value={description} onChange={event => {
-        setDescription(event.target.value)
-      }} />
-      <TextField id="standard-basic" label="Rating" variant="standard" type="text" value={rating} onChange={event => {
-        setRating(event.target.value)
-      }} />
-      <TextField id="standard-basic" label="Trailer" variant="standard" type="text" value={trailer} onChange={event => {
-        setTrailer(event.target.value)
-      }} />
-      <Button variant="contained" style={{ marginTop: 10 }} onClick={() => onSubmit()}>Add Movie</Button>
-    </div>
-
-
-
-  </div>
-}
-
-
 
 
 export default App;
