@@ -17,7 +17,7 @@ export const formValidationSchema = yup.object({
         .min(4)
         // .max(12, 'need smaller password')
         .required('fill this poster'),
-    description: yup
+    summary: yup
         .string()
         .min(20)
         .required('fill this summary'),
@@ -36,7 +36,7 @@ export const AddMovie = (props) => {
     // const [name, setName] = useState('')
     // const [rating, setRating] = useState('')
     // const [poster, setPoster] = useState('')
-    // const [description, setDescription] = useState('')
+    // const [summary, setSummary] = useState('')
     // const [trailer, setTrailer] = useState('')
     const history = useHistory()
     const [movie, setMovie] = useState({})
@@ -52,19 +52,19 @@ export const AddMovie = (props) => {
     const resetValues = () => {
         // setName('')
         // setPoster('')
-        // setDescription('')
+        // setSummary('')
         // setRating('')
         // setTrailer('')
     }
 
     const onSubmit = (newMovie) => {
-        const { name, rating, poster, description, trailer } = newMovie
-        if (name && rating && poster && description) {
+        const { name, rating, poster, summary, trailer } = newMovie
+        if (name && rating && poster && summary) {
             let params = {
                 name,
                 poster,
                 rating,
-                description,
+                summary,
                 trailer
             }
             addMovieApi(params)
@@ -76,13 +76,13 @@ export const AddMovie = (props) => {
 
 
     const formik = useFormik({
-        initialValues: { name: '', poster: '', description: '', rating: '', trailer: '' },
+        initialValues: { name: '', poster: '', summary: '', rating: '', trailer: '' },
         // validate: formValidate,
         validationSchema: formValidationSchema,
         onSubmit: onSubmit
     })
     const { handleChange, handleSubmit, handleBlur, values, errors, touched } = formik
-    const { name, poster, description, rating, trailer } = values
+    const { name, poster, summary, rating, trailer } = values
 
     return <div>
         <div className="add-movie-form">
@@ -105,15 +105,15 @@ export const AddMovie = (props) => {
                 error={errors.poster && touched.poster}
                 helperText={errors.poster} />
             {/* {errors.poster && touched ? errors.poster : ''} */}
-            <TextField id="standard-basic" label="Description" variant="standard" type="text"
-                name='description'
-                value={description}
-                placeholder='Enter description'
+            <TextField id="standard-basic" label="Summary" variant="standard" type="text"
+                name='summary'
+                value={summary}
+                placeholder='Enter summary'
                 onBlur={handleBlur}
                 onChange={handleChange}
-                error={errors.description && touched.description}
-                helperText={errors.description} />
-            {/* {errors.description && touched ? errors.description : ''} */}
+                error={errors.summary && touched.summary}
+                helperText={errors.summary} />
+            {/* {errors.summary && touched ? errors.summary : ''} */}
             <TextField id="standard-basic" label="Rating" variant="standard" type="text"
                 name='rating'
                 value={rating}

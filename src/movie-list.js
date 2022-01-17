@@ -60,8 +60,8 @@ export const MovieList = (props) => {
 
 
 const Movie = (props) => {
-    const { name, poster, rating, description, id, deleteButton, editButton } = props
-    const [showDescription, setShowDescription] = useState(true)
+    const { name, poster, rating, summary, id, deleteButton, editButton } = props
+    const [showSummary, setShowSummary] = useState(true)
     const history = useHistory()
     return <Card className="movie-container">
         <img className="movie-poster" src={poster} alt="img" />
@@ -69,8 +69,8 @@ const Movie = (props) => {
             <div className="movie-specs">
                 <h3 className="movie-name">
                     {name}
-                    <IconButton color="primary" onClick={() => setShowDescription(!showDescription)}>
-                        {showDescription ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                    <IconButton color="primary" onClick={() => setShowSummary(!showSummary)}>
+                        {showSummary ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                     </IconButton>
                     <IconButton color="primary" onClick={() => history.push(`/movies/${id}`)}>
                         <InfoIcon />
@@ -80,8 +80,8 @@ const Movie = (props) => {
                     ⭐️ {rating}
                 </p>
             </div>
-            <p className="movie-description">
-                {showDescription && description}
+            <p className="movie-summary">
+                {showSummary && summary}
             </p>
             <CardActions>
                 <LikeButton />

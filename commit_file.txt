@@ -24,3 +24,7 @@ Dark theme completed with help of material ui theme context
 
 05.12.2021:
 Completed Form validation in movie app using mockapi for apis, Formik and yup for validation
+
+17.01.2022:
+Again pulled things from github post mac update
+Changed Description to Summary for whole app

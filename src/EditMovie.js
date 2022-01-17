@@ -10,7 +10,7 @@ export const EditMovie = (props) => {
     // const [name, setName] = useState('')
     // const [rating, setRating] = useState('')
     // const [poster, setPoster] = useState('')
-    // const [description, setDescription] = useState('')
+    // const [summary, setSummary] = useState('')
     // const [trailer, setTrailer] = useState('')
     const history = useHistory()
     const [movie, setMovie] = useState({})
@@ -35,10 +35,10 @@ export const EditMovie = (props) => {
             // if (response) {
             // setName(response?.name)
             // setRating(response?.rating)
-            // setDescription(response?.description)
+            // setSummary(response?.summary)
             // setPoster(response?.image)
             // setTrailer(response?.trailer)
-            setMovie({ name: response.name, poster: response.poster, description: response.description, rating: response.rating, trailer: response.trailer })
+            setMovie({ name: response.name, poster: response.poster, summary: response.summary, rating: response.rating, trailer: response.trailer })
             // }
         })
 
@@ -63,19 +63,19 @@ export const EditMovie = (props) => {
     const resetValues = () => {
         // setName('')
         // setPoster('')
-        // setDescription('')
+        // setSummary('')
         // setRating('')
         // setTrailer('')
     }
 
     const onSubmit = (newMovie) => {
-        const { name, rating, poster, description, trailer } = newMovie
-        if (name && rating && poster && description) {
+        const { name, rating, poster, summary, trailer } = newMovie
+        if (name && rating && poster && summary) {
             let params = {
                 name,
                 poster,
                 rating,
-                description,
+                summary,
                 trailer
             }
 
@@ -103,13 +103,13 @@ export const EditMovie = (props) => {
 const UpdateMovie = (props) => {
     const { movie, onSubmit } = props
     const formik = useFormik({
-        initialValues: { name: movie.name, poster: movie.poster, description: movie.description, rating: movie.rating, trailer: movie.trailer },
+        initialValues: { name: movie.name, poster: movie.poster, summary: movie.summary, rating: movie.rating, trailer: movie.trailer },
         // validate: formValidate,
         validationSchema: formValidationSchema,
         onSubmit: onSubmit
     });
     const { handleChange, handleSubmit, handleBlur, values, errors, touched } = formik;
-    const { name, poster, description, rating, trailer } = values;
+    const { name, poster, summary, rating, trailer } = values;
 
     return <div>
         <div className="add-movie-form">
@@ -131,15 +131,15 @@ const UpdateMovie = (props) => {
                 error={errors.poster && touched.poster}
                 helperText={errors.poster} />
             {/* {errors.poster && touched ? errors.poster : ''} */}
-            <TextField id="standard-basic" label="Description" variant="standard" type="text"
-                name='description'
-                value={description}
-                placeholder='Enter description'
+            <TextField id="standard-basic" label="Summary" variant="standard" type="text"
+                name='summary'
+                value={summary}
+                placeholder='Enter summary'
                 onBlur={handleBlur}
                 onChange={handleChange}
-                error={errors.description && touched.description}
-                helperText={errors.description} />
-            {/* {errors.description && touched ? errors.description : ''} */}
+                error={errors.summary && touched.summary}
+                helperText={errors.summary} />
+            {/* {errors.summary && touched ? errors.summary : ''} */}
             <TextField id="standard-basic" label="Rating" variant="standard" type="text"
                 name='rating'
                 value={rating}

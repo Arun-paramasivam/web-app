@@ -22,7 +22,7 @@ import { EditMovie } from './EditMovie';
 //     name: 'Avengers: Endgame',
 //     rating: 9.0,
 //     image: 'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQA_-tL18_rj9zEcjN6n41NEaJm-kRNF9UeOtvksZ4z_OW6jRA9',
-//     description: 'Adrift in space with no food or water, Tony Stark sends a message to Pepper Potts as his oxygen supply starts to dwindle. Meanwhile, the remaining Avengers -- Thor, Black Widow, Captain America and Bruce Banner -- must figure out a way to bring back their vanquished allies for an epic showdown with Thanos -- the evil demigod who decimated the planet and the universe'
+//     summary: 'Adrift in space with no food or water, Tony Stark sends a message to Pepper Potts as his oxygen supply starts to dwindle. Meanwhile, the remaining Avengers -- Thor, Black Widow, Captain America and Bruce Banner -- must figure out a way to bring back their vanquished allies for an epic showdown with Thanos -- the evil demigod who decimated the planet and the universe'
 //   }
 // ]
 
@@ -169,7 +169,7 @@ const MovieDetails = (props) => {
   // const movie = movies[id]
   const [name, setName] = useState('')
   const [poster, setPoster] = useState('')
-  const [description, setDescription] = useState('')
+  const [summary, setSummary] = useState('')
   const [rating, setRating] = useState(0)
   const [trailer, setTrailer] = useState('')
   // console.log('MovieDetails', movies)
@@ -178,10 +178,10 @@ const MovieDetails = (props) => {
     console.log('response', response)
     setMovie(response)
     if (response) {
-      const { name, poster, description, rating, trailer } = response || {}
+      const { name, poster, summary, rating, trailer } = response || {}
       setName(name)
       setPoster(poster)
-      setDescription(description)
+      setSummary(summary)
       setRating(rating)
       setTrailer(trailer)
     }
@@ -201,8 +201,8 @@ const MovieDetails = (props) => {
           ⭐️ {rating}
         </p>
       </div>
-      <p className="movie-description">
-        {description}
+      <p className="movie-summary">
+        {summary}
       </p>
       <Button variant="outlined" startIcon={<ArrowBackIosNewIcon />} onClick={() => history.goBack()}>
         Back
