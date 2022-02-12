@@ -6,13 +6,14 @@ import { useHistory } from 'react-router-dom';
 import InfoIcon from '@mui/icons-material/Info';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { API_URL } from './gobal';
 
 export const MovieList = (props) => {
     // const { movies } = props
     const history = useHistory()
     const [movies, setMovies] = useState([])
     const getMoviesApi = async () => {
-        const response = await fetch('https://61ab1cb7bfb110001773f3b4.mockapi.io/movies').then(res => res.json())
+        const response = await fetch(`${API_URL}/movies`).then(res => res.json())
         // console.log('response', response)
         setMovies(response)
     }
@@ -27,7 +28,7 @@ export const MovieList = (props) => {
 
 
     const deleteMovie = async (id) => {
-        const response = await fetch(`https://61ab1cb7bfb110001773f3b4.mockapi.io/movies/${id}`, {
+        const response = await fetch(`${API_URL}/movies/${id}`, {
             method: 'DELETE'
         }).then(res => res.json())
         if (response)

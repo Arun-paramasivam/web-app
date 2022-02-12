@@ -17,6 +17,7 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { AddMovie } from './AddMovie';
 import { BasicForm } from './BasicForm';
 import { EditMovie } from './EditMovie';
+import { API_URL } from './gobal';
 // const movies = [
 //   {
 //     name: 'Avengers: Endgame',
@@ -48,7 +49,7 @@ function App() {
   }
 
   const getMoviesApi = async () => {
-    const response = await fetch('https://61ab1cb7bfb110001773f3b4.mockapi.io/movies').then(res => res.json())
+    const response = await fetch(`${API_URL}/movies`).then(res => res.json())
     // console.log('response', response)
     setMovies(response)
   }
@@ -174,7 +175,7 @@ const MovieDetails = (props) => {
   const [trailer, setTrailer] = useState('')
   // console.log('MovieDetails', movies)
   const getMovie = async (id) => {
-    const response = await fetch(`https://61ab1cb7bfb110001773f3b4.mockapi.io/movies/${id}`).then(res => res.json())
+    const response = await fetch(`${API_URL}/movies/${id}`).then(res => res.json())
     console.log('response', response)
     setMovie(response)
     if (response) {

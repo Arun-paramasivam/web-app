@@ -4,6 +4,7 @@ import * as yup from 'yup'
 import { useFormik } from "formik";
 import { Switch, Route, Link, Redirect, useParams, useHistory } from 'react-router-dom'
 import { formValidationSchema } from './AddMovie';
+import { API_URL } from './gobal';
 
 export const EditMovie = (props) => {
     const { id } = useParams()
@@ -28,7 +29,7 @@ export const EditMovie = (props) => {
 
 
     const getSingleMovieApi = async () => {
-        await fetch(`https://61ab1cb7bfb110001773f3b4.mockapi.io/movies/${id}`, {
+        await fetch(`${API_URL}/movies/${id}`, {
             method: 'GET',
         }).then(res => res.json()).then(response => {
             // console.log('response', response)
@@ -45,7 +46,7 @@ export const EditMovie = (props) => {
     }
 
     const addMovieApi = async (params) => {
-        await fetch(`https://61ab1cb7bfb110001773f3b4.mockapi.io/movies`, {
+        await fetch(`${API_URL}/movies`, {
             headers: { "Content-type": "application/json" },
             method: 'POST',
             body: JSON.stringify(params)
@@ -53,7 +54,7 @@ export const EditMovie = (props) => {
     }
 
     const updateMovieApi = async (params) => {
-        await fetch(`https://61ab1cb7bfb110001773f3b4.mockapi.io/movies/${id}`, {
+        await fetch(`${API_URL}/movies/${id}`, {
             headers: { "Content-type": "application/json" },
             method: 'PUT',
             body: JSON.stringify(params)

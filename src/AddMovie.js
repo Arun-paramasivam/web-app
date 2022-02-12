@@ -5,6 +5,7 @@ import { Switch, Route, Link, Redirect, useParams, useHistory } from 'react-rout
 import * as yup from 'yup'
 import { useFormik } from "formik";
 import { EditMovie } from './EditMovie';
+import { API_URL } from './gobal';
 
 export const formValidationSchema = yup.object({
     name: yup
@@ -42,7 +43,7 @@ export const AddMovie = (props) => {
     const [movie, setMovie] = useState({})
 
     const addMovieApi = async (params) => {
-        await fetch(`https://61ab1cb7bfb110001773f3b4.mockapi.io/movies`, {
+        await fetch(`${API_URL}/movies`, {
             headers: { "Content-type": "application/json" },
             method: 'POST',
             body: JSON.stringify(params)

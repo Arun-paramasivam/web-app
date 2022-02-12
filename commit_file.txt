@@ -28,3 +28,6 @@ Completed Form validation in movie app using mockapi for apis, Formik and yup fo
 17.01.2022:
 Again pulled things from github post mac update
 Changed Description to Summary for whole app
+
+12.02.2022:
+Connected with backend(heroku deployed)
