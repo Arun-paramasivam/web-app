@@ -43,14 +43,14 @@ export const MovieList = (props) => {
                 deleteButton={<IconButton color="error" aria-label="delete" onClick={() => {
                     // let newMoviesList = movies.filter((item, i) => i !== index)
                     // setMovies([...newMoviesList])
-                    deleteMovie(item?.id)
+                    deleteMovie(item?._id)
                 }}>
                     <DeleteIcon />
                 </IconButton>}
                 editButton={<IconButton
                     color="primary"
                     onClick={() => {
-                        history.push(`movies/edit/${item.id}`)
+                        history.push(`movies/edit/${item._id}`)
                     }}>
                     <EditIcon />
                 </IconButton>}
@@ -61,7 +61,7 @@ export const MovieList = (props) => {
 
 
 const Movie = (props) => {
-    const { name, poster, rating, summary, id, deleteButton, editButton } = props
+    const { name, poster, rating, summary, _id, deleteButton, editButton } = props
     const [showSummary, setShowSummary] = useState(true)
     const history = useHistory()
     return <Card className="movie-container">
@@ -73,7 +73,7 @@ const Movie = (props) => {
                     <IconButton color="primary" onClick={() => setShowSummary(!showSummary)}>
                         {showSummary ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                     </IconButton>
-                    <IconButton color="primary" onClick={() => history.push(`/movies/${id}`)}>
+                    <IconButton color="primary" onClick={() => history.push(`/movies/${_id}`)}>
                         <InfoIcon />
                     </IconButton>
                 </h3>

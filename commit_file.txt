@@ -31,3 +31,6 @@ Changed Description to Summary for whole app
 
 12.02.2022:
 Connected with backend(heroku deployed)
+
+15.02.2022:
+converted id to _id from front-end
