@@ -46,7 +46,8 @@ export const AddMovie = (props) => {
         await fetch(`${API_URL}/movies`, {
             headers: { "Content-type": "application/json" },
             method: 'POST',
-            body: JSON.stringify(params)
+            //=> array is used here since insertMany is used in backend
+            body: JSON.stringify([params])
         }).then(() => history.push('/movies'))
     }
 
